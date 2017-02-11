@@ -4,3 +4,7 @@ dj-database-url
 dj-static
 
 -e git+https://github.com/fhanspach/dj-secret-key-util#egg=secret_key_util==1.2.3
+
+djangorestframework
+django-filter
+bravado
