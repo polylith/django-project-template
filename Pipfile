@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[[source]]
+url = "https://$PYPI_USERNAME:$PYPI_PASSWORD@nexus.polylith.io/repository/pypi/simple"
+verify_ssl = true
+name = "polylith"
+
+[packages]
+django = "*"
+pillow = "*"
+dj-database-url = "*"
+docker-database-url = "*"
+dj-static = "*"
+raven = "*"
+secret-key-util = {git = "https://github.com/fhanspach/dj-secret-key-util", editable = true, ref = "ed3a4ba461784ece93068e2ab62a8d6270b7a601"}
+gunicorn = "*"
+
+[dev-packages]
