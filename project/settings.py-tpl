@@ -80,7 +80,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "6e2bmahu38vuzy0fd2xw*jz32*9tva_lp=$c!^v6pu)-4qd4k7"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1",]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "{project_name}.polylith.local"]
 
 # Application definition
 
