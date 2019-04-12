@@ -28,7 +28,7 @@ sentry_logging = LoggingIntegration(
 
 if not DEBUG:
     sentry_sdk.init(
-        dsn="https://b3714c1493bb427285619aa3dddc0d78@sentry.io/291777",
+        dsn="CHANGE_ME",
         environment=os.getenv('ENVIRONMENT', 'local'),
         integrations=[sentry_logging, DjangoIntegration()]
     )
