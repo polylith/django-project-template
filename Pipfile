@@ -15,7 +15,6 @@ dj-database-url = "*"
 docker-database-url = "*"
 dj-static = "*"
 sentry-sdk = "*"
-secret-key-util = {git = "https://github.com/fhanspach/dj-secret-key-util", editable = true, ref = "ed3a4ba461784ece93068e2ab62a8d6270b7a601"}
 gunicorn = "*"
 teamcity-messages = "*"
 psycopg2-binary = "*"
