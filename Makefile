@@ -5,5 +5,4 @@ test:
 run:
 	pipenv run python manage.py migrate --noinput
 	pipenv run python manage.py collectstatic --noinput
-	pipenv run python -m secret_key_util > /dev/null
 	pipenv run gunicorn project.wsgi --workers 5 -b 0.0.0.0:8000 -t 600 --access-logfile - --error-logfile -
