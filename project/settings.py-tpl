@@ -123,9 +123,21 @@ WSGI_APPLICATION = 'project.wsgi.application'
 import docker_database_url
 import dj_database_url
 
+default_database_url = os.getenv('DATABASE_URL',
+                                 docker_database_url.start_db_and_get_url(db_name="{{ project_name }}_db",
+                                                                          database_url_name='DATABASE_URL'))
+events_database_url = os.getenv('EVENTS_DATABASE_URL',
+                                docker_database_url.start_db_and_get_url(db_name="events_db",
+                                                                         database_url_name='EVENTS_DATABASE_URL'))
+
 DATABASES = {
-    'default': dj_database_url.config(default=docker_database_url.start_db_and_get_url(db_name="{{ project_name }}_db"))
+    'default': dj_database_url.parse(default_database_url),
+    'events_db': dj_database_url.parse(events_database_url)
 }
+
+DATABASE_ROUTERS = [
+    "events.router.Router",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
