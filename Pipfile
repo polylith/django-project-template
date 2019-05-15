@@ -18,5 +18,6 @@ sentry-sdk = "*"
 gunicorn = "*"
 teamcity-messages = "*"
 psycopg2-binary = "*"
+entwicklerheld-events = "~=1.1.3"
 
 [dev-packages]
