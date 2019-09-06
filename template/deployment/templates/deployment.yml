@@ -1,0 +1,108 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: @= project_name =@
+  labels:
+    app: @= project_name =@
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: @= project_name =@
+    spec:
+      nodeSelector:
+        type: service
+      containers:
+      - image: {{ docker_registry_host }}/@= project_name =@:{{ @= project_name_with_underscore =@_version }}
+        name: @= project_name =@
+        resources:
+          requests:
+            memory: "300Mi"
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: @= project_name =@-secret-envs
+        - configMapRef:
+            name: @= project_name =@-configmap-envs
+        env:
+        - name: DATABASE_URL
+          value: "postgres://$(POSTGRES_APP_DATABASE_USERNAME):$(POSTGRES_APP_DATABASE_PASSWORD)@$(POSTGRES_APP_HOST):5432/$(POSTGRES_APP_DATABASE_NAME)"
+        - name: EVENTS_DATABASE_URL
+          value: "postgres://$(POSTGRES_EVENTS_DATABASE_NAME):$(POSTGRES_EVENTS_DATABASE_PASSWORD)@$(POSTGRES_EVENTS_HOST):5432/$(POSTGRES_EVENTS_DATABASE_NAME)"
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+        command: ["make"]
+        args: ["run"]
+      imagePullSecrets:
+      - name: {{ docker_registry_secret_name_prefix }}-registrysecret
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: @= project_name =@-eventworker
+  labels:
+    app: @= project_name =@-eventworker
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: @= project_name =@-eventworker
+    spec:
+      nodeSelector:
+        type: service
+      containers:
+      - image: {{ docker_registry_host }}/@= project_name =@:{{ @= project_name_with_underscore =@_version }}
+        name: @= project_name =@-eventworker
+        resources:
+          requests:
+            memory: "300Mi"
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: @= project_name =@-secret-envs
+        - configMapRef:
+            name: @= project_name =@-configmap-envs
+        env:
+        - name: DATABASE_URL
+          value: "postgres://$(POSTGRES_APP_DATABASE_USERNAME):$(POSTGRES_APP_DATABASE_PASSWORD)@$(POSTGRES_APP_HOST):5432/$(POSTGRES_APP_DATABASE_NAME)"
+        - name: EVENTS_DATABASE_URL
+          value: "postgres://$(POSTGRES_EVENTS_DATABASE_NAME):$(POSTGRES_EVENTS_DATABASE_PASSWORD)@$(POSTGRES_EVENTS_HOST):5432/$(POSTGRES_EVENTS_DATABASE_NAME)"
+        command: ["make"]
+        args: ["run_eventworker"]
+      initContainers:
+      - name: ansible-init
+        image: {{ docker_registry_host }}/ansible-init:latest
+        envFrom:
+        - secretRef:
+            name: @= project_name =@-secret-envs
+        - configMapRef:
+            name: @= project_name =@-configmap-envs
+        env:
+        - name: DATABASE_URL
+          value: "postgres://$(POSTGRES_APP_DATABASE_USERNAME):$(POSTGRES_APP_DATABASE_PASSWORD)@$(POSTGRES_APP_HOST):5432/$(POSTGRES_APP_DATABASE_NAME)"
+        - name: EVENTS_DATABASE_URL
+          value: "postgres://$(POSTGRES_EVENTS_DATABASE_NAME):$(POSTGRES_EVENTS_DATABASE_PASSWORD)@$(POSTGRES_EVENTS_HOST):5432/$(POSTGRES_EVENTS_DATABASE_NAME)"
+        volumeMounts:
+        - name: init
+          mountPath: /ansible/includes
+        - name: credentials
+          mountPath: /ansible/secrets
+      imagePullSecrets:
+      - name: {{ docker_registry_secret_name_prefix }}-registrysecret
+      volumes:
+      - name: init
+        configMap:
+          name: @= project_name =@-init
+      - name: credentials
+        secret:
+          secretName: cluster-secrets
+---

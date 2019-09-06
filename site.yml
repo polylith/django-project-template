@@ -1,0 +1,22 @@
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+  - name: Create directories
+    file:
+      path: '{{project_name}}/{{ item.path }}'
+      state: directory
+      mode: '{{ item.mode }}'
+    with_filetree: template/
+    when: item.state == 'directory'
+
+  - name: Template files (explicitly skip directories in order to use the 'src' attribute)
+    template:
+      src: '{{ item.src }}'
+      dest: '{{project_name}}/{{ item.path }}'
+      mode: '{{ item.mode }}'
+      variable_start_string: '@='
+      variable_end_string: '=@'
+      block_start_string: '@@'
+      block_end_string: '@@'
+    with_filetree: template/
+    when: item.state == 'file'

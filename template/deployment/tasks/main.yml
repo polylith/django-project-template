@@ -1,0 +1,17 @@
+- import_role:
+    name: kubectl
+    private: yes
+  vars:
+    name: @= project_name =@
+    kubectl_content: |
+      {{lookup('template', 'configmap.yml') }}
+      ---
+      {{lookup('template', 'deployment.yml') }}
+      ---
+      {{lookup('template', 'ingress.yml') }}
+      ---
+      {{lookup('template', 'secret.yml') }}
+      ---
+      {{lookup('template', 'service.yml') }}
+      ---
+      {{lookup('template', 'servicemonitor.yml') }}

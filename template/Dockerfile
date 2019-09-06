@@ -12,7 +12,7 @@ ADD Pipfile Pipfile
 ADD Pipfile.lock Pipfile.lock
 RUN PYPI_USERNAME=$PYPI_USERNAME PYPI_PASSWORD=$PYPI_PASSWORD pipenv sync
 
-ADD . .
+ADD .. .
 
 EXPOSE 8000
 
