@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: @= project_name =@
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/auth-url: "http://auth-proxy.default.svc.cluster.local"
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - @= project_name =@.{{env_domain}}
+    secretName: wildcard-tls
+  rules:
+  - host: @= project_name =@.{{env_domain}}
+    http:
+      paths:
+      - backend:
+          serviceName: @= project_name =@
+          servicePort: 80
+        path: /
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: @= project_name =@-public
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/auth-url: "http://auth-proxy-allow-unauthorized.default.svc.cluster.local"
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - @= project_name =@.{{env_domain}}
+    secretName: wildcard-tls
+  rules:
+  - host: @= project_name =@.{{env_domain}}
+    http:
+      paths:
+      - backend:
+          serviceName: @= project_name =@
+          servicePort: 80
+        path: /admin
+      - backend:
+          serviceName: @= project_name =@
+          servicePort: 80
+        path: /static
+      - backend:
+          serviceName: @= project_name =@
+          servicePort: 80
+        path: /media
+      - backend:
+          serviceName: @= project_name =@
+          servicePort: 80
+        path: /api/campaign

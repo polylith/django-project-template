@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: @= project_name =@-configmap-envs
+  namespace: default
+data:
+  PRODUCTION: "true"
+  POSTGRES_APP_HOST: "{{ app_db_instance_host }}"
+  POSTGRES_APP_DATABASE_NAME: "@= project_name =@"
+  POSTGRES_APP_DATABASE_USERNAME: "{{ @= project_name|replace("-", "_") =@_db_user }}"
+  POSTGRES_EVENTS_HOST: "{{ events_db_instance_host }}"
+  POSTGRES_EVENTS_DATABASE_NAME: "events"
+  POSTGRES_EVENTS_DATABASE_USERNAME: "{{ events_db_user }}"
+  CACHE_URL:  "redis://redis:6379/1"
+  MEDIA_S3_BUCKET_NAME: "{{ @= project_name|replace("-", "_") =@_s3_bucket }}"
+  MEDIA_S3_REGION_NAME: "{{ @= project_name|replace("-", "_") =@_s3_region }}"
+  ENVIRONMENT: "{{ env }}"
+  ENVIRONMENT_DOMAIN: "{{ env_domain }}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: @= project_name =@-init
+  namespace: default
+data:
+  init.yml: |
+    {%raw%}
+      # create app database
+      - include_vars:
+                file: secrets/cluster-secrets.yml
+      - postgresql_db:
+                login_host: "{{ lookup('env','POSTGRES_APP_HOST') }}"
+                login_user: "{{postgres_username}}"
+                login_password: "{{postgres_password}}"
+                db: "{{ lookup('env','POSTGRES_APP_DATABASE_NAME') }}"
+                state: present
+      - postgresql_user:
+                login_host: "{{ lookup('env','POSTGRES_APP_HOST') }}"
+                login_user: "{{postgres_username}}"
+                login_password: "{{postgres_password}}"
+                db: "{{ lookup('env','POSTGRES_APP_DATABASE_NAME') }}"
+                name: "{{ lookup('env','POSTGRES_APP_DATABASE_USERNAME') }}"
+                password: "{{ lookup('env','POSTGRES_APP_DATABASE_PASSWORD') }}"
+                encrypted: yes
+                role_attr_flags: CREATEDB,LOGIN
+
+      # create events database
+      - postgresql_db:
+                login_host: "{{ lookup('env','POSTGRES_EVENTS_HOST') }}"
+                login_user: "{{postgres_username}}"
+                login_password: "{{postgres_password}}"
+                db: "{{ lookup('env','POSTGRES_EVENTS_DATABASE_NAME') }}"
+                state: present
+      - postgresql_user:
+                login_host: "{{ lookup('env','POSTGRES_EVENTS_HOST') }}"
+                login_user: "{{postgres_username}}"
+                login_password: "{{postgres_password}}"
+                db: "{{ lookup('env','POSTGRES_EVENTS_DATABASE_NAME') }}"
+                name: "{{ lookup('env','POSTGRES_EVENTS_DATABASE_USERNAME') }}"
+                password: "{{ lookup('env','POSTGRES_EVENTS_DATABASE_PASSWORD') }}"
+                encrypted: yes
+                role_attr_flags: CREATEDB,LOGIN
+      {%endraw%}
+---

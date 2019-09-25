@@ -1,0 +1,7 @@
+@= project_name|replace("-", "_") =@_version: latest
+
+@= project_name|replace("-", "_") =@_s3_bucket: "{{env}}-@= project_name =@-media-storage"
+@= project_name|replace("-", "_") =@_region: "eu-central-1"
+
+app_db_instance_host: pgbouncer
+events_db_instance_host: pgbouncer-events

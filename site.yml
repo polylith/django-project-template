@@ -1,0 +1,26 @@
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+  - name: Create directories
+    file:
+      path: '{{destination_folder | default(".")}}/{{ item.path }}'
+      state: directory
+      mode: '{{ item.mode }}'
+    with_filetree: template/
+    when: item.state == 'directory'
+    vars:
+      - destination_folder: /data
+
+  - name: Template files (explicitly skip directories in order to use the 'src' attribute)
+    template:
+      src: '{{ item.src }}'
+      dest: '{{destination_folder | default(".")}}/{{ item.path }}'
+      mode: '{{ item.mode }}'
+      variable_start_string: '@='
+      variable_end_string: '=@'
+      block_start_string: '@@'
+      block_end_string: '@@'
+    with_filetree: template/
+    when: item.state == 'file'
+    vars:
+      - destination_folder: /data

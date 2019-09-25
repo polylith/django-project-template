@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: @= project_name =@
+  namespace: monitoring
+  labels:
+    collector: metrics
+spec:
+  selector:
+    matchLabels:
+      app: @= project_name =@
+  endpoints:
+  - targetPort: 8000
+    path: /metrics
+    interval: 60s
+  namespaceSelector:
+    matchNames:
+    - default
+
