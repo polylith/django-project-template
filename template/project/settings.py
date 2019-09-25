@@ -204,7 +204,7 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": os.getenv("CACHE_URL"),
         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-        "KEY_PREFIX": "@= project_name_with_underscore =@_",
+        "KEY_PREFIX": "@= project_name|replace("-", "_") =@_",
     }
 }
 if DEBUG and not os.getenv("CACHE_URL", None):

@@ -3,16 +3,18 @@
   tasks:
   - name: Create directories
     file:
-      path: '{{project_name}}/{{ item.path }}'
+      path: '{{destination_folder | default(".")}}/{{project_name}}/{{ item.path }}'
       state: directory
       mode: '{{ item.mode }}'
     with_filetree: template/
     when: item.state == 'directory'
+    vars:
+      - destination_folder: /data
 
   - name: Template files (explicitly skip directories in order to use the 'src' attribute)
     template:
       src: '{{ item.src }}'
-      dest: '{{project_name}}/{{ item.path }}'
+      dest: '{{destination_folder | default(".")}}/{{project_name}}/{{ item.path }}'
       mode: '{{ item.mode }}'
       variable_start_string: '@='
       variable_end_string: '=@'
@@ -20,3 +22,5 @@
       block_end_string: '@@'
     with_filetree: template/
     when: item.state == 'file'
+    vars:
+      - destination_folder: /data

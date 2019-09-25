@@ -16,7 +16,7 @@ spec:
       nodeSelector:
         type: service
       containers:
-      - image: {{ docker_registry_host }}/@= project_name =@:{{ @= project_name_with_underscore =@_version }}
+      - image: {{ docker_registry_host }}/@= project_name =@:{{ @= project_name|replace("-", "_") =@_version }}
         name: @= project_name =@
         resources:
           requests:
@@ -60,7 +60,7 @@ spec:
       nodeSelector:
         type: service
       containers:
-      - image: {{ docker_registry_host }}/@= project_name =@:{{ @= project_name_with_underscore =@_version }}
+      - image: {{ docker_registry_host }}/@= project_name =@:{{ @= project_name|replace("-", "_") =@_version }}
         name: @= project_name =@-eventworker
         resources:
           requests:
