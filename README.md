@@ -23,6 +23,7 @@ of one word or a maximum of two words connected with an `-` (minus).
 
 ## Steps to do manually afterwards
 
+- Add a repository for the new project on github (https://github.com/organizations/polylith/repositories/new)
 - Add service to deployment repository (https://github.com/polylith/deployment)
 - Create CI Job (https://ci.entwicklerheld.de)
 - Create a sentry project (https://sentry.io/entwicklerheld-plattform/events/getting-started/python-django/) and copy the sentry dsn over to django project/settings.py
