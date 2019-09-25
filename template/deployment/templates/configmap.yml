@@ -24,7 +24,7 @@ metadata:
   namespace: default
 data:
   init.yml: |
-    {%raw%}
+{%raw%}
       # create app database
       - include_vars:
                 file: secrets/cluster-secrets.yml
@@ -60,5 +60,5 @@ data:
                 password: "{{ lookup('env','POSTGRES_EVENTS_DATABASE_PASSWORD') }}"
                 encrypted: yes
                 role_attr_flags: CREATEDB,LOGIN
-      {%endraw%}
+{%endraw%}
 ---
