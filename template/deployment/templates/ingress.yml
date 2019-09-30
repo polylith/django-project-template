@@ -51,7 +51,3 @@ spec:
           serviceName: @= project_name =@
           servicePort: 80
         path: /media
-      - backend:
-          serviceName: @= project_name =@
-          servicePort: 80
-        path: /api/campaign
