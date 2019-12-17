@@ -34,4 +34,3 @@ class Command(runserver.Command):
 
         setup_test_data()
         super().run(**options)
-
