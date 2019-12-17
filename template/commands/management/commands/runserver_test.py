@@ -19,9 +19,19 @@ class Command(runserver.Command):
     def run(self, **options):
         from django.core.management import call_command
 
-        call_command("migrate")
+        if options.get("skip_app_database_migration"):
+            logger.info("Skip app database migration")
+        else:
+            call_command("migrate")
+            call_command("flush", interactive=False)
+
         call_command("migrate", "--database=events_db")
-        call_command("flush", interactive=False)
-        call_command("flush", "--database=events_db", interactive=False)
+        if options.get("skip_event_database_flushing"):
+            logger.info("Skip event database flushing")
+        else:
+
+            call_command("flush", "--database=events_db", interactive=False)
+
         setup_test_data()
         super().run(**options)
+
