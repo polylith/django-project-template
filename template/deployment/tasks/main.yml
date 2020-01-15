@@ -1,6 +1,5 @@
 - import_role:
     name: kubectl
-    private: yes
   vars:
     name: @= project_name =@
     kubectl_content: |
@@ -15,3 +14,4 @@
       {{lookup('template', 'service.yml') }}
       ---
       {{lookup('template', 'servicemonitor.yml') }}
+  tags: @= project_name =@
