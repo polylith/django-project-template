@@ -146,6 +146,9 @@ DATABASES = {
     "events_db": dj_database_url.parse(events_database_url),
 }
 
+DATABASES.get("default", {}).update({"DISABLE_SERVER_SIDE_CURSORS": True})
+DATABASES.get("events_db", {}).update({"DISABLE_SERVER_SIDE_CURSORS": True})
+
 DATABASE_ROUTERS = ["events.router.Router"]
 
 
@@ -218,8 +221,6 @@ if DEBUG and not os.getenv("CACHE_URL", None):
 
 
 PROMETHEUS_EXPORT_MIGRATIONS = False
-
-DISABLE_SERVER_SIDE_CURSORS = True
 
 REGISTERED_EVENTS = {}
 EVENTS_THAT_GETS_GENERATED_BY_THIS_SERVICE = []
