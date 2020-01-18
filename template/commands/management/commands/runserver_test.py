@@ -1,4 +1,7 @@
+import logging
 from django.contrib.staticfiles.management.commands import runserver
+
+logger = logging.getLogger(__name__)
 
 
 def setup_test_data():
