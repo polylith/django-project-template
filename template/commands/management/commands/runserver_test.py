@@ -19,6 +19,21 @@ def setup_test_data():
 class Command(runserver.Command):
     help = "Runs the server with test data"
 
+    def add_arguments(self, parser):
+        super().add_arguments(parser)
+
+        # Named (optional) arguments
+        parser.add_argument(
+            "--skip_app_database_migration",
+            action="store_true",
+            help="Don't migrate and flush app database on startup",
+        )
+        parser.add_argument(
+            "--skip_event_database_flushing",
+            action="store_true",
+            help="Don't flush events database on startup",
+        )
+        
     def run(self, **options):
         from django.core.management import call_command
 
