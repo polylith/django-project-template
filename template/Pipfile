@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [[source]]
-url = "https://$PYPI_USERNAME:$PYPI_PASSWORD@nexus.polylith.io/repository/pypi/simple"
+url = "https://$PYPI_USERNAME:$PYPI_PASSWORD@nexus.internal.entwicklerheld.de/repository/pypi/simple"
 verify_ssl = true
 name = "polylith"
 
 [packages]
-django = "*"
+django = "~=2.2.0"
 pillow = "*"
 dj-database-url = "*"
 docker-database-url = "*"
