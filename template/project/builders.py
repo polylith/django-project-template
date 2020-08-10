@@ -1,3 +1,6 @@
+from typing import Union
+
+
 class ResponseDataBuilder:
     @staticmethod
     def build_error_response(
@@ -15,5 +18,5 @@ class ResponseDataBuilder:
         return response
 
     @staticmethod
-    def build_success_response(data: dict) -> dict:
+    def build_success_response(data: Union[dict, list]) -> dict:
         return {"data": data}
