@@ -5,7 +5,7 @@ metadata:
   labels:
     app: @= project_name =@
 spec:
-  replicas: 3
+  replicas: {{ @= project_name =@:{{ @= project_name|replace("-", "_") =@_replica_count }}
   strategy:
     type: RollingUpdate
   template:
@@ -50,7 +50,7 @@ metadata:
   labels:
     app: @= project_name =@-eventworker
 spec:
-  replicas: 1
+  replicas: {{ @= project_name =@:{{ @= project_name|replace("-", "_") =@_eventworker_replica_count }}
   strategy:
     type: RollingUpdate
   template:
