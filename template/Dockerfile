@@ -1,16 +1,15 @@
 FROM python:3.6
 
-# We have to do this because of: https://github.com/pypa/pipenv/issues/1223
 RUN ln -s /usr/local/bin/python /bin/python
-RUN pip install 'pipenv==2018.10.9' 
+RUN pip install poetry
 
 ARG PYPI_USERNAME
 ARG PYPI_PASSWORD
 
 WORKDIR /app
-ADD Pipfile Pipfile
-ADD Pipfile.lock Pipfile.lock
-RUN PYPI_USERNAME=$PYPI_USERNAME PYPI_PASSWORD=$PYPI_PASSWORD pipenv sync
+ADD pyproject.toml pyproject.toml
+ADD poetry.lock poetry.lock
+RUN POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install
 
 ADD . .
 
