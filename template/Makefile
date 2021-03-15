@@ -1,3 +1,10 @@
+LOCAL_PATH:=
+ifeq ($(OS), Windows_NT)
+   LOCAL_PATH += ${shell echo %cd%}
+else
+   LOCAL_PATH += ${PWD}
+endif
+
 build:
 	@echo "No additional build steps available"
 
@@ -22,3 +29,9 @@ run_eventworker:
 	poetry run python manage.py migrate --database=events_db --noinput
 	poetry run python manage.py createcachetable
 	poetry run python manage.py run_eventworker
+
+format:
+	docker run --pull=always --rm -t -v ${LOCAL_PATH}:/app eu.gcr.io/polylith-177713/black .
+
+check_codestyle:
+	docker run --pull=always --rm -t -v ${LOCAL_PATH}:/app eu.gcr.io/polylith-177713/python-guideline-checks

@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: @= project_name =@
@@ -6,6 +6,9 @@ metadata:
     app: @= project_name =@
 spec:
   replicas: {{ @= project_name|replace("-", "_") =@_replica_count }}
+  selector:
+    matchLabels:
+      app: @= project_name =@
   strategy:
     type: RollingUpdate
   template:
@@ -43,7 +46,7 @@ spec:
       imagePullSecrets:
       - name: {{ docker_registry_secret_name_prefix }}-registrysecret
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: @= project_name =@-eventworker
@@ -51,6 +54,9 @@ metadata:
     app: @= project_name =@-eventworker
 spec:
   replicas: @= project_name|replace("-", "_") =@_eventworker_replica_count }}
+  selector:
+    matchLabels:
+      app: @= project_name =@-eventworker
   strategy:
     type: RollingUpdate
   template:
