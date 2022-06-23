@@ -98,9 +98,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "cors.CORSMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
+
+# Add CORS Middleware only for local development
+# on staging and production cors requests (OPTIONS) are handled by nginx
+if DEBUG:
+    MIDDLEWARE.append("cors.CORSMiddleware")
 
 ROOT_URLCONF = 'project.urls'
 
