@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.7
 
 RUN ln -s /usr/local/bin/python /bin/python
 RUN pip install poetry
