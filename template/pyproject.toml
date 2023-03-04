@@ -6,8 +6,8 @@ authors = ["EntwicklerHeld <hallo@entwicklerheld.de>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-django = "~=3.1.0"
-pillow = "~=9.0.1"
+django = "~=3.2.0"
+pillow = "~=9.3.0"
 dj-database-url = "~=0.5.0"
 docker-database-url = "~=1.5.1"
 dj-static = "~=0.0.6"
