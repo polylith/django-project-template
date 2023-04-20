@@ -22,7 +22,8 @@ spec:
       - backend:
           service:
             name: @= project_name =@
-            port: 80
+            port: 
+              number: 80
         path: /
         pathType: ImplementationSpecific
 ---
@@ -57,12 +58,14 @@ spec:
       - backend:
           service:
             name: @= project_name =@
-            port: 80
+            port: 
+              number: 80
         path: /static
         pathType: ImplementationSpecific
       - backend:
           service:
             name: @= project_name =@
-            port: 80
+            port: 
+              number: 80
         path: /media
         pathType: ImplementationSpecific
