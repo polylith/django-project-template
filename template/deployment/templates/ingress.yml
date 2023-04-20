@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: @= project_name =@
@@ -7,6 +7,9 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/auth-url: "http://auth-proxy.default.svc.cluster.local"
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, HEAD"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://{{env_domain}},https://*.{{env_domain}}{% if env == 'staging' %},http://localhost.staging-platform.entwicklerheld.de:8000{% endif %}"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, X-Requested-With"  
 spec:
   tls:
   - hosts:
@@ -17,11 +20,13 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: @= project_name =@
-          servicePort: 80
+          service:
+            name: @= project_name =@
+            port: 80
         path: /
+        pathType: ImplementationSpecific
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: @= project_name =@-public
@@ -30,6 +35,9 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/auth-url: "http://auth-proxy-allow-unauthorized.default.svc.cluster.local"
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, HEAD"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://{{env_domain}},https://*.{{env_domain}}{% if env == 'staging' %},http://localhost.staging-platform.entwicklerheld.de:8000{% endif %}"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, X-Requested-With"  
 spec:
   tls:
   - hosts:
@@ -40,14 +48,21 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: @= project_name =@
-          servicePort: 80
+          service:
+            name: @= project_name =@
+            port:
+              number: 80
         path: /admin
+        pathType: ImplementationSpecific
       - backend:
-          serviceName: @= project_name =@
-          servicePort: 80
+          service:
+            name: @= project_name =@
+            port: 80
         path: /static
+        pathType: ImplementationSpecific
       - backend:
-          serviceName: @= project_name =@
-          servicePort: 80
+          service:
+            name: @= project_name =@
+            port: 80
         path: /media
+        pathType: ImplementationSpecific
