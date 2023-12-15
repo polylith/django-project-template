@@ -31,5 +31,5 @@ build-backend = "poetry.core.masonry.api"
 
 [[tool.poetry.source]]
 name = "entwicklerheld"
-url = "https://entwicklerheld.jfrog.io/artifactory/api/pypi/default-pypi/simple"
+url = "https://europe-west3-python.pkg.dev/polylith-177713/ehpypi/simple"
 secondary = true
